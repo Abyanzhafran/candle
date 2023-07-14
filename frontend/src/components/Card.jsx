@@ -1,11 +1,21 @@
 export default function Card() {
   return (
-    <div className="card card-side bg-gray-100 border border-gray-300">
-      <figure className="w-[120px] md:w-52"><img src="http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg" alt="Movie" /></figure>
-      <div className="flex flex-col w-36 md:w-64 h-full p-2 md:p-6 gap-4 md:gap-10">
-        <h2 className="card-title line-clamp-3">Shoes! title lorem ipsum dolor sit amet prodigy ipsum dolor sit amet prodigy</h2>
-        <span className="text-lg font-semibold">IDR 100.000</span>
+    <div className="card w-[190px] bg-gray-100 shadow-sm">
+      <figure className="w-[190px]">
+        <img
+          src="http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg"
+          alt="Movie"
+        />
+      </figure>
+      <div className="card-body p-4">
+        <h2 className="card-title text-gray-700">Classical Muthology</h2>
+        <p className="line-clamp-2 text-gray-700">
+          If a dog chews shoes whose shoes does he choose?
+        </p>
+        <div className="card-actions justify-start">
+          <div className="text-md font-bold text-gray-700">Rp. 100.000</div>
+        </div>
       </div>
     </div>
-  )
+  );
 }
