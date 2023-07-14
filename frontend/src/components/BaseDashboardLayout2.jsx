@@ -1,68 +1,198 @@
-import { HomeIcon, Bars3Icon, ArrowDownIcon } from '@heroicons/react/24/solid'
 import {
-  Link, Outlet
-} from "react-router-dom";
+  HomeIcon,
+  Bars3Icon,
+  ArchiveBoxIcon,
+  NewspaperIcon,
+  ClipboardDocumentListIcon,
+  ArrowUpTrayIcon,
+  ArrowDownTrayIcon,
+  UserCircleIcon,
+  PlusIcon,
+} from "@heroicons/react/24/outline";
+import { Link, Outlet } from "react-router-dom";
 
 export default function BaseDashboardLayout2() {
+  // const api_url = import.meta.env.VITE_API_URL;
   const btnSidebar = [
     {
       icon: <HomeIcon />,
-      name: 'HOME',
-      link: '/dashboard2',
+      name: "Dashboard",
+      link: "/dashboard/home",
     },
     {
-      icon: <HomeIcon />,
-      name: 'ABOUT',
-      link: '/dashboard2/about',
-    }
+      icon: <ArchiveBoxIcon />,
+      name: "Inventaris",
+      children: [
+        {
+          name: "Daftar Inventaris",
+          link: "/dashboard/inventory",
+        },
+        {
+          name: "Tambah Inventaris",
+          link: "/dashboard/inventory/add-inventory",
+        },
+      ],
+    },
+    {
+      icon: <NewspaperIcon />,
+      name: "Nota",
+      link: "/dashboard/quotation",
+    },
+    {
+      icon: <ClipboardDocumentListIcon />,
+      name: "Laporan Harian",
+      link: "/dashboard/dailyReport",
+    },
+    {
+      icon: <ArrowDownTrayIcon />,
+      name: "Buat Pemasukan Lain",
+      link: "/dashboard/other-income/add-other-income",
+    },
+    {
+      icon: <ArrowUpTrayIcon />,
+      name: "Pengeluaran Harian",
+      children: [
+        {
+          name: "Daftar Pengeluaran",
+          link: "/dashboard/expenses",
+        },
+        {
+          name: "Buat Pengeluaran",
+          link: "/dashboard/expenses/add-expenses",
+        },
+      ],
+    },
   ];
 
   return (
     <>
-      <div className="shadow drawer drawer-mobile h-screen">
+      <div className="shadow drawer drawer-mobile h-full lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+
         <div className="flex flex-col items-center justify-center drawer-content">
-          <div className="w-full navbar flex items-center bg-base-100 sticky top-0">
+          <div className="w-full navbar flex items-center bg-gray-50 sticky top-0">
             <div className="flex-none lg:hidden">
-              <label for="my-drawer-2" className="btn btn-square btn-ghost">
-                <Bars3Icon className="text-white" />
+              <label
+                htmlFor="my-drawer-2"
+                className="hover:bg-gray-200 hover:rounded-full w-9"
+              >
+                <Bars3Icon className="text-gray-600 font-bold p-1" />
               </label>
             </div>
-            <div className="flex-1 px-2 mx-2">
-              <div className="rounded-full w-8 mt-1">
-                <img src="http://daisyui.com/tailwind-css-component-profile-5@56w.png" />
+
+            <div className="flex-1"></div>
+
+            <div className="flex items-center gap-2">
+              <label
+                htmlFor="daily-capital-modal"
+                className="btn btn-md btn-ghost btn-circle tooltip tooltip-bottom normal-case"
+                data-tip="Modal Harian"
+              >
+                <PlusIcon className="w-9 mt-[5px] ml-[5px]" />
+              </label>
+              {/* Daily Capital Modal */}
+              <input
+                type="checkbox"
+                id="daily-capital-modal"
+                className="modal-toggle"
+              />
+              <label
+                htmlFor="daily-capital-modal"
+                className="modal cursor-pointer"
+              >
+                <label className="modal-box relative" htmlFor="">
+                  <div className="flex flex-col gap-4">
+                    <h3 className="text-lg font-bold">Buat Modal Harian</h3>
+                    <input
+                      type="number"
+                      placeholder="eg: 20000000"
+                      className="input input-sm input-bordered w-full max-w-xs"
+                      onChange={(e) => setUpdateThisDayCapital(e.target.value)}
+                    />
+                    <div className="modal-action">
+                      <label
+                        htmlFor="modal-update"
+                        className="btn btn-sm btn-secondary border-0 text-md rounded capitalize"
+                        onClick={() => setThisDayCapital()}
+                      >
+                        Submit
+                      </label>
+                    </div>
+                  </div>
+                </label>
+              </label>
+              <div className="dropdown dropdown-end">
+                <label tabIndex={0} className="btn btn-ghost btn-circle">
+                  <div className="w-8 rounded-full">
+                    <UserCircleIcon />
+                  </div>
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+                >
+                  <li>
+                    <Link to="https://inventory-mj-fe.vercel.app">
+                      Go to homepage
+                    </Link>
+                  </li>
+                  <li>
+                    <a>Logout</a>
+                  </li>
+                </ul>
               </div>
             </div>
-            <button className="flex items-center">
-              <div className="avatar">
-                <div className="rounded-full w-8 mt-1">
-                  <img src="http://daisyui.com/tailwind-css-component-profile-5@56w.png" />
-                </div>
-              </div>
-              <ArrowDownIcon className="text-white" />
-            </button>
           </div>
-          <main className="w-full h-screen flex items-center justify-center bg-gray-500">
+          <main className="w-full h-screen bg-gray-200 overflow-auto">
             <Outlet />
           </main>
         </div>
+
         <div className="drawer-side">
-          <label for="my-drawer-2" className="drawer-overlay"></label>
-          <ul className="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
-            <div>
-              <span className="text-xl font-bold text-white">Dashboard</span>
+          <label htmlFor="my-drawer-2" className="drawer-overlay" />
+          <ul className="menu p-4 w-72 h-full bg-gray-50 text-base-content">
+            <div className="flex items-center gap-4">
+              <label
+                htmlFor="my-drawer-2"
+                className="hover:bg-gray-200 hover:rounded-full w-9 lg:hidden"
+              >
+                <Bars3Icon className="text-gray-600 font-bold p-1" />
+              </label>
+              <span className="text-xl ml-0 md:ml-4 font-bold text-gray-600 whitespace-nowrap">
+                Dashboard Seller
+              </span>
             </div>
-            <div className="border-b-2 bg-white my-4" />
-            <li className="text-white">
-              {btnSidebar.map((el) => (
-                <Link to={el.link} key={el.link}>
-                  <div className="flex gap-3">
-                    {el.icon}
+            <div className="my-4" />
+            {btnSidebar.map((el) =>
+              el.children ? (
+                <div tabIndex="0" className="collapse collapse-arrow">
+                  <input type="checkbox" />
+                  <div className="collapse-title text-gray-600 font-semibold flex gap-3 whitespace-nowrap">
+                    <div className="w-7">{el.icon}</div>
                     {el.name}
                   </div>
-                </Link>
-              ))}
-            </li>
+                  <ul className="collapse-content menu">
+                    {el.children.map((child) => (
+                      <li key={child.link}>
+                        <Link
+                          to={child.link}
+                          className="flex gap-3 active:bg-gray-300"
+                        >
+                          {child.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <li className="text-gray-600 font-semibold" key={el.link}>
+                  <Link to={el.link} className="flex gap-3 active:bg-gray-300">
+                    <div className="w-7">{el.icon}</div>
+                    {el.name}
+                  </Link>
+                </li>
+              )
+            )}
           </ul>
         </div>
       </div>

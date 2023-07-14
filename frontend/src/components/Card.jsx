@@ -8,7 +8,9 @@ export default function Card() {
         />
       </figure>
       <div className="card-body p-4">
-        <h2 className="card-title text-gray-700">Classical Muthology</h2>
+        <h2 className="text-lg font-semibold text-gray-700">
+          Classical Muthology
+        </h2>
         <p className="line-clamp-2 text-gray-700">
           If a dog chews shoes whose shoes does he choose?
         </p>

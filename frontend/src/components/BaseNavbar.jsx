@@ -19,7 +19,7 @@ export default function BaseNavbar() {
       <div className="drawer drawer-mobile h-screen">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="flex flex-col items-center justify-center drawer-content">
-          <div className="w-full navbar flex items-center bg-gray-100 border-b-2 border-gray-300 sticky top-0 z-10">
+          <div className="w-full navbar flex items-center bg-gray-50 border-b-2 border-gray-300 sticky top-0 z-10">
             <div className="flex-none lg:hidden">
               <label
                 for="my-drawer-2"
@@ -37,14 +37,32 @@ export default function BaseNavbar() {
 
             <div className="flex-1"></div>
 
-            <button className="flex items-end">
+            {/* <button className="flex items-end">
               <div className="avatar">
                 <div className="rounded-full w-8 mt-1 mr-2">
                   <img src="http://daisyui.com/tailwind-css-component-profile-5@56w.png" />
                 </div>
               </div>
-              <ArrowDownIcon className="text-white" />
-            </button>
+            </button> */}
+
+            <div className="dropdown dropdown-bottom dropdown-end flex items-end">
+              <label tabIndex={0} className="m-1 avatar">
+                <div className="rounded-full w-8 mt-1 mr-2">
+                  <img src="http://daisyui.com/tailwind-css-component-profile-5@56w.png" />
+                </div>
+              </label>
+              <ul
+                tabIndex={0}
+                className="dropdown-content z-[1] menu p-2 shadow bg-gray-50 rounded-box w-52"
+              >
+                <li>
+                  <a className="text-gray-800">Go to dashboard</a>
+                </li>
+                <li>
+                  <a className="text-gray-800">Logout</a>
+                </li>
+              </ul>
+            </div>
           </div>
           <Outlet />
         </div>
