@@ -2,18 +2,6 @@ import { Bars3Icon, ArrowDownIcon } from "@heroicons/react/24/solid";
 import { Link, Outlet } from "react-router-dom";
 
 export default function BaseNavbar() {
-  const checkboxData = [
-    {
-      name: "Lorem checkbox_1",
-    },
-    {
-      name: "Lorem checkbox_2",
-    },
-    {
-      name: "Lorem checkbox_3",
-    },
-  ];
-
   return (
     <>
       <div className="drawer drawer-mobile h-screen">
@@ -30,20 +18,15 @@ export default function BaseNavbar() {
             </div>
 
             <div className="flex-none font-mono ml-2">
-              <p className="font-mono font-bold text-3xl text-sky-500">
+              <Link
+                to="/"
+                className="font-mono font-bold text-3xl text-sky-500"
+              >
                 Candle
-              </p>
+              </Link>
             </div>
 
             <div className="flex-1"></div>
-
-            {/* <button className="flex items-end">
-              <div className="avatar">
-                <div className="rounded-full w-8 mt-1 mr-2">
-                  <img src="http://daisyui.com/tailwind-css-component-profile-5@56w.png" />
-                </div>
-              </div>
-            </button> */}
 
             <div className="dropdown dropdown-bottom dropdown-end flex items-end">
               <label tabIndex={0} className="m-1 avatar">
@@ -56,10 +39,14 @@ export default function BaseNavbar() {
                 className="dropdown-content z-[1] menu p-2 shadow bg-gray-50 rounded-box w-52"
               >
                 <li>
-                  <a className="text-gray-800">Go to dashboard</a>
+                  <Link to="/dashboard2" className="text-gray-800">
+                    Go to dashboard
+                  </Link>
                 </li>
                 <li>
-                  <a className="text-gray-800">Logout</a>
+                  <Link to="/signin" className="text-gray-800">
+                    Logout
+                  </Link>
                 </li>
               </ul>
             </div>

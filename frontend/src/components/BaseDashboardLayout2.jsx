@@ -1,13 +1,8 @@
 import {
-  HomeIcon,
   Bars3Icon,
-  ArchiveBoxIcon,
-  NewspaperIcon,
-  ClipboardDocumentListIcon,
-  ArrowUpTrayIcon,
-  ArrowDownTrayIcon,
   UserCircleIcon,
   PlusIcon,
+  ClipboardDocumentListIcon,
 } from "@heroicons/react/24/outline";
 import { Link, Outlet } from "react-router-dom";
 
@@ -15,52 +10,12 @@ export default function BaseDashboardLayout2() {
   // const api_url = import.meta.env.VITE_API_URL;
   const btnSidebar = [
     {
-      icon: <HomeIcon />,
-      name: "Dashboard",
-      link: "/dashboard/home",
-    },
-    {
-      icon: <ArchiveBoxIcon />,
-      name: "Inventaris",
-      children: [
-        {
-          name: "Daftar Inventaris",
-          link: "/dashboard/inventory",
-        },
-        {
-          name: "Tambah Inventaris",
-          link: "/dashboard/inventory/add-inventory",
-        },
-      ],
-    },
-    {
-      icon: <NewspaperIcon />,
-      name: "Nota",
-      link: "/dashboard/quotation",
+      icon: <PlusIcon />,
+      name: "Add book",
     },
     {
       icon: <ClipboardDocumentListIcon />,
-      name: "Laporan Harian",
-      link: "/dashboard/dailyReport",
-    },
-    {
-      icon: <ArrowDownTrayIcon />,
-      name: "Buat Pemasukan Lain",
-      link: "/dashboard/other-income/add-other-income",
-    },
-    {
-      icon: <ArrowUpTrayIcon />,
-      name: "Pengeluaran Harian",
-      children: [
-        {
-          name: "Daftar Pengeluaran",
-          link: "/dashboard/expenses",
-        },
-        {
-          name: "Buat Pengeluaran",
-          link: "/dashboard/expenses/add-expenses",
-        },
-      ],
+      name: "List book",
     },
   ];
 
@@ -83,13 +38,6 @@ export default function BaseDashboardLayout2() {
             <div className="flex-1"></div>
 
             <div className="flex items-center gap-2">
-              <label
-                htmlFor="daily-capital-modal"
-                className="btn btn-md btn-ghost btn-circle tooltip tooltip-bottom normal-case"
-                data-tip="Modal Harian"
-              >
-                <PlusIcon className="w-9 mt-[5px] ml-[5px]" />
-              </label>
               {/* Daily Capital Modal */}
               <input
                 type="checkbox"
@@ -166,12 +114,12 @@ export default function BaseDashboardLayout2() {
             {btnSidebar.map((el) =>
               el.children ? (
                 <div tabIndex="0" className="collapse collapse-arrow">
-                  <input type="checkbox" />
+                  <input type="checkbox" className="peer" />
                   <div className="collapse-title text-gray-600 font-semibold flex gap-3 whitespace-nowrap">
                     <div className="w-7">{el.icon}</div>
                     {el.name}
                   </div>
-                  <ul className="collapse-content menu">
+                  <ul className="collapse-content">
                     {el.children.map((child) => (
                       <li key={child.link}>
                         <Link
@@ -186,7 +134,10 @@ export default function BaseDashboardLayout2() {
                 </div>
               ) : (
                 <li className="text-gray-600 font-semibold" key={el.link}>
-                  <Link to={el.link} className="flex gap-3 active:bg-gray-300">
+                  <Link
+                    to={el.link}
+                    className="flex gap-3 text-base active:bg-gray-300"
+                  >
                     <div className="w-7">{el.icon}</div>
                     {el.name}
                   </Link>
