@@ -1,6 +1,6 @@
 export default function DashboardHome() {
   return (
-    <div className="flex items-center justify-start w-full mt-8 mx-8">
+    <div className="flex items-center justify-start w-full mt-8 pl-8">
       <div className="flex flex-col gap-6">
         <span className="text-2xl font-bold">Add Book</span>
         <div className="sm:w-[580px] md:w-[600px] lg:w-[780px] grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -35,6 +35,16 @@ export default function DashboardHome() {
               placeholder="Type here"
               className="input input-bordered input-sm w-full max-w-xs"
             />
+          </div>
+
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
+              <span className="label-text">Description</span>
+            </label>
+            <textarea
+              className="textarea textarea-bordered"
+              placeholder="Bio"
+            ></textarea>
           </div>
 
           <div className="form-control w-full max-w-xs">
