@@ -1,7 +1,7 @@
 package config
 
 import (
-	"fmt"	
+	"fmt"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
