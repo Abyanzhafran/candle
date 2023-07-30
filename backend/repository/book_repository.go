@@ -22,3 +22,7 @@ func (r *BookRepository) FindAll() ([]*models.Book, error) {
 	}
 	return books, nil
 }
+
+func (r *BookRepository) AddBook(book *models.Book) error {
+	return r.db.Create(book).Error
+}

@@ -5,7 +5,8 @@ import (
 	// "strconv"
 
 	// "candle-backend/models"
-	"candle-backend/repository"	
+	"candle-backend/models"
+	"candle-backend/repository"
 
 	"github.com/gin-gonic/gin"
 )
@@ -38,5 +39,27 @@ func (c *BookController) FindAll(ctx *gin.Context) {
 		"status": "ok",
 		"message": "Book fetched successfully",
 		"data": books,
+	})
+}
+
+func (c *BookController) AddBook(ctx *gin.Context) {
+	var book models.Book
+	if err := ctx.ShouldBindJSON(&book); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status": "error",
+			"message": err.Error(),
+		})
+		return
+	}
+	if err := c.repo.AddBook(&book); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status": "error",
+			"message": err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": "ok",
+		"message": "Book added",
 	})
 }
