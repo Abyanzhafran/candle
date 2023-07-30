@@ -3,10 +3,10 @@ package controllers
 import (
 	"net/http"
 	// "strconv"
-
-	// "candle-backend/models"
 	"candle-backend/models"
 	"candle-backend/repository"
+
+	"github.com/google/uuid"
 
 	"github.com/gin-gonic/gin"
 )
@@ -51,6 +51,15 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 		})
 		return
 	}
+	// generate uuid for the book
+	id, err := uuid.NewRandom() 
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status": "error",
+			"message": "Error generating uuid",
+		})
+	}
+	book.ID = id.String()
 	if err := c.repo.AddBook(&book); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status": "error",
