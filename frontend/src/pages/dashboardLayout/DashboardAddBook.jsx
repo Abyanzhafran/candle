@@ -49,6 +49,17 @@ export default function DashboardHome() {
 
           <div className="form-control w-full max-w-xs">
             <label className="label">
+              <span className="label-text">Price</span>
+            </label>
+            <input
+              type="number"
+              placeholder="Type here"
+              className="input input-bordered input-sm w-full max-w-xs"
+            />
+          </div>
+
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
               <span className="label-text">Upload cover</span>
             </label>
             <input
