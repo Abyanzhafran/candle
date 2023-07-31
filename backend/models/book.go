@@ -7,5 +7,5 @@ type Book struct {
 	Description string `json:"description"`
 	PublishDate string `json:"publishdate"`
 	Price       uint64 `json:"price"`
-	UploadCover string `json:"uploadcover"`
+	ImageUrl    string `json:"imgurl"`
 }
