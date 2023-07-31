@@ -35,6 +35,7 @@ func (c *BookController) FindAll(ctx *gin.Context) {
 		})
 		return
 	}
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  "ok",
 		"message": "Book fetched successfully",
@@ -52,6 +53,7 @@ func (c *BookController) GetBookByID(ctx *gin.Context) {
 		})
 		return
 	}
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": "ok",
 		"data":   book,
@@ -67,6 +69,7 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 		})
 		return
 	}
+
 	// generate uuid for the book
 	id, err := uuid.NewRandom()
 	if err != nil {
@@ -75,6 +78,7 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 			"message": "Error generating uuid",
 		})
 	}
+
 	book.ID = id.String()
 	if err := c.repo.AddBook(&book); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -83,6 +87,7 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 		})
 		return
 	}
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  "ok",
 		"message": "Book added",
@@ -119,5 +124,20 @@ func (c *BookController) EditBook(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  "ok",
 		"message": "Book updated",
+	})
+}
+
+func (c *BookController) DeleteBook(ctx *gin.Context) {
+	id := ctx.Param("id")
+	if err := c.repo.DeleteBook(id); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status":  "ok",
+		"message": "Book deleted",
 	})
 }

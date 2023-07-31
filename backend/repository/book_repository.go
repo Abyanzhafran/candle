@@ -38,3 +38,7 @@ func (r *BookRepository) AddBook(book *models.Book) error {
 func (r *BookRepository) EditBook(book *models.Book) error {
 	return r.db.Save(book).Error
 }
+
+func (r *BookRepository) DeleteBook(id string) error {
+	return r.db.Where("id = ?", id).Delete(&models.Book{}).Error
+}

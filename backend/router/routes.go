@@ -16,6 +16,7 @@ func SetupRouter(repo *repository.BookRepository) *gin.Engine {
 	router.GET("/books/:id", BookCtrl.GetBookByID)
 	router.POST("/books", BookCtrl.AddBook)
 	router.PUT("/books/:id", BookCtrl.EditBook)
+	router.DELETE("/books/:id", BookCtrl.DeleteBook)
 
 	return router
 }
