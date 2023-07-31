@@ -12,9 +12,10 @@ func SetupRouter(repo *repository.BookRepository) *gin.Engine {
 
 	BookCtrl := controllers.NewBookController(repo)
 
-	router.GET("/books", BookCtrl.FindAll)	
+	router.GET("/books", BookCtrl.FindAll)
+	router.GET("/books/:id", BookCtrl.GetBookByID)
 	router.POST("/books", BookCtrl.AddBook)
+	router.PUT("/books/:id", BookCtrl.EditBook)
 
 	return router
 }
-
