@@ -6,6 +6,6 @@ type Book struct {
 	Author      string `json:"author"`
 	Description string `json:"description"`
 	PublishDate string `json:"publishdate"`
+	ImageUrl    string `json:"imageurl"`
 	Price       uint64 `json:"price"`
-	ImageUrl    string `json:"imgurl"`
 }
