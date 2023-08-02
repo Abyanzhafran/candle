@@ -62,7 +62,11 @@ func (c *BookController) GetBookByID(ctx *gin.Context) {
 
 func (c *BookController) AddBook(ctx *gin.Context) {
 	var book models.Book
-	if err := ctx.ShouldBindJSON(&book); err != nil {
+	/*
+		use shouldBind is actually can handle json and form-data,
+		depend on your models tags
+	*/
+	if err := ctx.ShouldBind(&book); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),
