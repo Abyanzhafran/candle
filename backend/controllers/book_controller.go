@@ -95,16 +95,6 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 		})
 		return
 	}
-
-	// save image file 
-	// imagePath := filepath.Join("../uploaded_image", filepath.Ext(file.Filename))
-	// if err := ctx.SaveUploadedFile(file, imagePath); err != nil {
-	// 	ctx.JSON(http.StatusInternalServerError, gin.H{
-	// 		"status": "error",
-	// 		"message": "Error saving image",
-	// 	})
-	// 	return
-	// }
 	
 	// make uploaded_image folder if it's doesn't exist
 	uploadsFolder := "../uploaded_image"
@@ -118,22 +108,16 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 		}
 	}
 
+	// save image file 
 	imagePath := filepath.Join(uploadsFolder, filepath.Ext(file.Filename))
 	if err := ctx.SaveUploadedFile(file, imagePath); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status": "error",
-			"message": "Error saving image",
+			"message": "Upload image error",
+			"error": err.Error(),
 		})
 		return
 	}
-	// imagePath := filepath.Join(uploadsFolder, file.Filename)
-	// if err := ctx.SaveUploadedFile(file, file.Filename); err != nil {
-	// 	ctx.JSON(http.StatusBadRequest, gin.H{
-	// 		"status": "error",
-	// 		"message": "Upload file error",
-	// 		"error": err.Error(),
-	// 	})		
-	// }
 
 	// fill the book struct(models) with uuid
 	book.ID = id.String()
