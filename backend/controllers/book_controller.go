@@ -72,7 +72,7 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": "Check your input data",
-			"error": err.Error(),
+			"error":   err.Error(),
 		})
 		return
 	}
@@ -90,33 +90,41 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 	file, err := ctx.FormFile("imagefile")
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status": "error",
+			"status":  "error",
 			"message": "failed uploading the image",
 		})
 		return
 	}
-	
+
 	// make uploaded_image folder if it's doesn't exist
 	uploadsFolder := "../uploaded_image"
 	if _, err := os.Stat(uploadsFolder); os.IsNotExist(err) {
 		err := os.Mkdir(uploadsFolder, 0755)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"status": "error",
+				"status":  "error",
 				"message": "Failed to create folder for saving image",
 			})
 		}
 	}
 
-	// save image file 
-	imagePath := filepath.Join(uploadsFolder, filepath.Ext(file.Filename))
-	if err := ctx.SaveUploadedFile(file, imagePath); err != nil {
+	filename := filepath.Join(uploadsFolder, file.Filename)
+	if err := ctx.SaveUploadedFile(file, filename); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status": "error",
+			"status":  "error",
 			"message": "Upload image error",
-			"error": err.Error(),
+			"error":   err.Error(),
 		})
 		return
+	}
+
+	// save image file
+	imageAbsPath, err := filepath.Abs(filename)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": "Failed to get filepath",
+		})
 	}
 
 	// fill the book struct(models) with uuid
@@ -127,8 +135,8 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 		you can add you domain like this if you want
 		book.ImageUrl = "http://your-domain.com/" + imagePath
 	*/
-	book.ImageUrl = imagePath
-	
+	book.ImageUrl = imageAbsPath
+
 	if err := c.repo.AddBook(&book); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
