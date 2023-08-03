@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"candle-backend/models"
 	"candle-backend/repository"
@@ -69,7 +71,8 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 	if err := ctx.ShouldBind(&book); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
-			"message": err.Error(),
+			"message": "Check your input data",
+			"error": err.Error(),
 		})
 		return
 	}
@@ -83,7 +86,65 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 		})
 	}
 
+	// handling upload image
+	file, err := ctx.FormFile("imagefile")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status": "error",
+			"message": "failed uploading the image",
+		})
+		return
+	}
+
+	// save image file 
+	// imagePath := filepath.Join("../uploaded_image", filepath.Ext(file.Filename))
+	// if err := ctx.SaveUploadedFile(file, imagePath); err != nil {
+	// 	ctx.JSON(http.StatusInternalServerError, gin.H{
+	// 		"status": "error",
+	// 		"message": "Error saving image",
+	// 	})
+	// 	return
+	// }
+	
+	// make uploaded_image folder if it's doesn't exist
+	uploadsFolder := "../uploaded_image"
+	if _, err := os.Stat(uploadsFolder); os.IsNotExist(err) {
+		err := os.Mkdir(uploadsFolder, 0755)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"status": "error",
+				"message": "Failed to create folder for saving image",
+			})
+		}
+	}
+
+	imagePath := filepath.Join(uploadsFolder, filepath.Ext(file.Filename))
+	if err := ctx.SaveUploadedFile(file, imagePath); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status": "error",
+			"message": "Error saving image",
+		})
+		return
+	}
+	// imagePath := filepath.Join(uploadsFolder, file.Filename)
+	// if err := ctx.SaveUploadedFile(file, file.Filename); err != nil {
+	// 	ctx.JSON(http.StatusBadRequest, gin.H{
+	// 		"status": "error",
+	// 		"message": "Upload file error",
+	// 		"error": err.Error(),
+	// 	})		
+	// }
+
+	// fill the book struct(models) with uuid
 	book.ID = id.String()
+
+	// fill the imageUrl struct(models) with the imageUrl value
+	/*
+		you can add you domain like this if you want
+		book.ImageUrl = "http://your-domain.com/" + imagePath
+	*/
+	book.ImageUrl = imagePath
+	
 	if err := c.repo.AddBook(&book); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
