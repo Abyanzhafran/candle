@@ -17,10 +17,9 @@ type BookController struct {
 	repo *repository.BookRepository
 }
 
-/*
-make new BookController instances based
-on repository.BookRepository field
-*/
+// make new BookController instances based
+// on repository.BookRepository field
+
 func NewBookController(repo *repository.BookRepository) *BookController {
 	/* the {repo} means, is creating a new BookController struct with the
 	   repo field set to the value of the repo parameter.
@@ -64,10 +63,8 @@ func (c *BookController) GetBookByID(ctx *gin.Context) {
 
 func (c *BookController) AddBook(ctx *gin.Context) {
 	var book models.Book
-	/*
-		use shouldBind is actually can handle json and form-data,
-		depend on your models tags
-	*/
+	// use shouldBind is actually can handle json and form-data,
+	// depend on your models tags
 	if err := ctx.ShouldBind(&book); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
@@ -131,10 +128,8 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 	book.ID = id.String()
 
 	// fill the imageUrl struct(models) with the imageUrl value
-	/*
-		you can add you domain like this if you want
-		book.ImageUrl = "http://your-domain.com/" + imagePath
-	*/
+	// you can add you domain like this if you want
+	// book.ImageUrl = "http://your-domain.com/" + imagePath
 	book.ImageUrl = imageAbsPath
 
 	if err := c.repo.AddBook(&book); err != nil {
