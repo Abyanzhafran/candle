@@ -19,7 +19,6 @@ type BookController struct {
 
 // make new BookController instances based
 // on repository.BookRepository field
-
 func NewBookController(repo *repository.BookRepository) *BookController {
 	/* the {repo} means, is creating a new BookController struct with the
 	   repo field set to the value of the repo parameter.
@@ -105,8 +104,29 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 		}
 	}
 
-	filename := filepath.Join(uploadsFolder, file.Filename)
-	if err := ctx.SaveUploadedFile(file, filename); err != nil {
+	// saving  - for production version
+	// savePath := filepath.Join(uploadsFolder, file.Filename)
+	// if err := ctx.SaveUploadedFile(file, filename); err != nil {
+	// 	ctx.JSON(http.StatusInternalServerError, gin.H{
+	// 		"status":  "error",
+	// 		"message": "Upload image error",
+	// 		"error":   err.Error(),
+	// 	})
+	// 	return
+	// }
+
+	// get absolute path - for production version
+	// imageAbsPath, err := filepath.Abs(filename)
+	// if err != nil {
+	// 	ctx.JSON(http.StatusInternalServerError, gin.H{
+	// 		"status":  "error",
+	// 		"message": "Failed to get filepath",
+	// 	})
+	// }
+
+	// save image file - for developement version
+	imagePathBase := filepath.Join(uploadsFolder, file.Filename)
+	if err := ctx.SaveUploadedFile(file, imagePathBase); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
 			"message": "Upload image error",
@@ -115,22 +135,14 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 		return
 	}
 
-	// save image file
-	imageAbsPath, err := filepath.Abs(filename)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": "Failed to get filepath",
-		})
-	}
-
 	// fill the book struct(models) with uuid
 	book.ID = id.String()
 
 	// fill the imageUrl struct(models) with the imageUrl value
 	// you can add you domain like this if you want
 	// book.ImageUrl = "http://your-domain.com/" + imagePath
-	book.ImageUrl = imageAbsPath
+	// you can change this line for dev mode or prod mode
+	book.ImageUrl = "http://127.0.0.1:8081/" + file.Filename
 
 	if err := c.repo.AddBook(&book); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
