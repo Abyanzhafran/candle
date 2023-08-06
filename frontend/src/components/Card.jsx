@@ -18,19 +18,19 @@ export default function Card() {
 
   return (
     <>
-      {booksData.map((obj) => (
+      {booksData.map((book) => (
         <div className="card w-[190px] bg-gray-100 shadow-sm">
           <figure className="w-[190px]">
-            <img src={obj.imageurl} className="h-48" />
+            <img src={book.imageurl} className="h-48" />
           </figure>
           <div className="card-body p-4 h-44">
             <h2 className="text-lg font-semibold text-gray-700 line-clamp-2">
-              {obj.title}
+              {book.title}
             </h2>
-            <p className="line-clamp-2 text-gray-700">{obj.description}</p>
+            <p className="line-clamp-2 text-gray-700">{book.description}</p>
             <div className="card-actions justify-start">
               <div className="text-md font-bold text-gray-700">
-                Rp. {obj.price}
+                Rp. {book.price}
               </div>
             </div>
           </div>
