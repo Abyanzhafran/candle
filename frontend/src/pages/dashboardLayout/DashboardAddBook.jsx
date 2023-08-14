@@ -1,4 +1,38 @@
+import { useState } from "react";
+import axios from "axios";
+
 export default function DashboardHome() {
+  const [addTitle, setAddTitle] = useState("");
+  const [addAuthor, setAddAuthor] = useState("");
+  const [addDescription, setAddDescription] = useState("");
+  const [addPublishDate, setAddPublishDate] = useState("");
+  const [addPrice, setAddPrice] = useState(0);
+  const [addImageFile, setAddImageFile] = useState(null);
+  const api_url = import.meta.env.VITE_API_URL;
+
+  const addBook = () => {
+    const formData = new FormData();
+    formData.append("title", addTitle);
+    formData.append("description", addDescription);
+    formData.append("author", addAuthor);
+    formData.append("publishdate", addPublishDate);
+    formData.append("price", addPrice);
+    formData.append("imagefile", addImageFile);
+
+    axios
+      .post(api_url + `/books`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="flex items-center justify-start w-full mt-8 pl-8">
       <div className="flex flex-col gap-6">
@@ -12,6 +46,7 @@ export default function DashboardHome() {
               type="text"
               placeholder="Type here"
               className="input input-bordered input-sm w-full max-w-xs"
+              onChange={(e) => setAddTitle(e.target.value)}
             />
           </div>
 
@@ -23,6 +58,7 @@ export default function DashboardHome() {
               type="text"
               placeholder="Type here"
               className="input input-bordered input-sm w-full max-w-xs"
+              onChange={(e) => setAddAuthor(e.target.value)}
             />
           </div>
 
@@ -34,6 +70,7 @@ export default function DashboardHome() {
               type="date"
               placeholder="Type here"
               className="input input-bordered input-sm w-full max-w-xs"
+              onChange={(e) => setAddPublishDate(e.target.value)}
             />
           </div>
 
@@ -44,6 +81,7 @@ export default function DashboardHome() {
             <textarea
               className="textarea textarea-bordered"
               placeholder="Bio"
+              onChange={(e) => setAddDescription(e.target.value)}
             ></textarea>
           </div>
 
@@ -55,6 +93,7 @@ export default function DashboardHome() {
               type="number"
               placeholder="Type here"
               className="input input-bordered input-sm w-full max-w-xs"
+              onChange={(e) => setAddPrice(e.target.value)}
             />
           </div>
 
@@ -65,8 +104,34 @@ export default function DashboardHome() {
             <input
               type="file"
               className="file-input file-input-bordered file-input-sm w-full max-w-xs"
+              onChange={(e) => setAddImageFile(e.target.files[0])}
             />
           </div>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div />
+          <label
+            htmlFor="modal-add"
+            className="btn btn-sm btn-secondary text-md rounded capitalize"
+          >
+            Submit
+          </label>
+          <input type="checkbox" id="modal-add" className="modal-toggle" />
+          <label htmlFor="modal-add" className="modal cursor-pointer">
+            <label className="modal-box relative" htmlFor="">
+              <h3 className="text-xl font-bold">Yakin mau submit ?</h3>
+              <div className="modal-action">
+                <label
+                  htmlFor="modal-add"
+                  className="btn btn-sm btn-secondary text-md rounded capitalize"
+                  onClick={() => addBook()}
+                >
+                  Submit
+                </label>
+              </div>
+            </label>
+          </label>
         </div>
       </div>
     </div>
