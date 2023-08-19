@@ -12,7 +12,7 @@ export default function BaseDashboardLayout2() {
     {
       icon: <PlusIcon />,
       name: "Add book",
-      link: "/dashboard2/dashboard-add-book",
+      link: "/dashboard2",
     },
     {
       icon: <ClipboardDocumentListIcon />,

@@ -1,6 +1,7 @@
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function DashboardAbout() {
   const [booksData, setBooksData] = useState([]);
@@ -60,9 +61,12 @@ export default function DashboardAbout() {
                   <td>
                     <div className="h-20 -mt-3 -ml-2">
                       <div className="flex items-center gap-2">
-                        <button className="btn btn-ghost btn-xs">
+                        <Link
+                          to="/book-detail"
+                          className="btn btn-ghost btn-xs"
+                        >
                           details
-                        </button>
+                        </Link>
                         <button className="btn btn-ghost btn-circle btn-sm">
                           <PencilSquareIcon className="text-gray-600 font-bold p-1" />
                         </button>
