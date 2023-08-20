@@ -18,7 +18,10 @@ export default function App() {
           <Route path="about" element={<About />}></Route>
         </Route>
         <Route path="signin" element={<SignIn />}></Route>
-        <Route path="book-detail" element={<DetailBook />}></Route>
+        <Route
+          path="book-detail/books/:bookId"
+          element={<DetailBook />}
+        ></Route>
       </Routes>
       {/* Not used, but just in case, so i don't delete it */}
       {/* <Routes>

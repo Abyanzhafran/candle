@@ -62,7 +62,7 @@ export default function DashboardAbout() {
                     <div className="h-20 -mt-3 -ml-2">
                       <div className="flex items-center gap-2">
                         <Link
-                          to="/book-detail"
+                          to={`/book-detail/books` + `/${book.id}`}
                           className="btn btn-ghost btn-xs"
                         >
                           details
