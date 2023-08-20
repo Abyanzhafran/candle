@@ -10,5 +10,5 @@ type Book struct {
 	PublishDate string                `json:"publishdate" form:"publishdate" gorm:"type:varchar(10)"`
 	ImageUrl    string                `json:"imageurl" form:"imageurl"`
 	Price       uint64                `json:"price" form:"price"`
-	ImageFile   *multipart.FileHeader `form:"imagefile" gorm:"-"`
+	ImageFile   *multipart.FileHeader `json:"-" form:"imagefile" gorm:"-"`
 }

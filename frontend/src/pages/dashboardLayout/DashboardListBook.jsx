@@ -5,6 +5,12 @@ import { Link } from "react-router-dom";
 
 export default function DashboardAbout() {
   const [booksData, setBooksData] = useState([]);
+  const [bookId, setBookId] = useState("");
+  const [updateTitle, setUpdateTitle] = useState("");
+  const [updateAuthor, setUpdateAuthor] = useState("");
+  const [updateDescription, setUpdateDescription] = useState("");
+  const [updatePublishDate, setUpdatePublishDate] = useState("");
+  const [updatePrice, setUpdatePrice] = useState(0);
   const api_url = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -26,6 +32,49 @@ export default function DashboardAbout() {
     }
   }
 
+  const updateBookById = () => {
+    axios
+      .put(api_url + `/books/${bookId}`, {
+        title:
+          updateTitle === ""
+            ? booksData.find((x) => x.id === bookId).title
+            : updateTitle,
+        author:
+          updateAuthor === ""
+            ? booksData.find((x) => x.id === bookId).author
+            : updateAuthor,
+        description:
+          updateDescription === ""
+            ? booksData.find((x) => x.id === bookId).description
+            : updateDescription,
+        publishdate:
+          updatePublishDate === ""
+            ? booksData.find((x) => x.id === bookId).publishdate
+            : updatePublishDate,
+        price:
+          updatePrice === 0
+            ? booksData.find((x) => x.id === bookId).price
+            : updatePrice,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const deleteBookById = () => {
+    axios
+      .delete(api_url + `/books/${bookId}`)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="flex items-start justify-start w-full h-auto mt-8 px-8">
       <div className="w-80 flex flex-col flex-wrap gap-6">
@@ -43,7 +92,7 @@ export default function DashboardAbout() {
             </thead>
             <tbody>
               {booksData.map((book) => (
-                <tr>
+                <tr key={book.id}>
                   <td>
                     <div className="h-20">{truncateString(book.title)}</div>
                   </td>
@@ -69,13 +118,19 @@ export default function DashboardAbout() {
                         </Link>
                         <button
                           className="btn btn-ghost btn-circle btn-sm"
-                          onClick={() => window.modal_update.showModal()}
+                          onClick={() => {
+                            window.modal_update.showModal();
+                            setBookId(book.id);
+                          }}
                         >
                           <PencilSquareIcon className="text-gray-600 font-bold p-1" />
                         </button>
                         <button
                           className="btn btn-ghost btn-circle btn-sm"
-                          onClick={() => window.modal_delete.showModal()}
+                          onClick={() => {
+                            window.modal_delete.showModal();
+                            setBookId(book.id);
+                          }}
                         >
                           <TrashIcon className="text-gray-600 font-bold p-1" />
                         </button>
@@ -93,55 +148,73 @@ export default function DashboardAbout() {
               {/* <p className="py-4">Press ESC key or click outside to close</p> */}
               <div className="flex flex-col gap-4">
                 <div>
-                  <label className="block text-gray-700 mb-2" for="productName">
+                  <label className="block text-gray-700 mb-2" htmlFor="title">
                     Title
                   </label>
                   <input
+                    id="title"
                     type="text"
                     className="input input-sm input-bordered w-full max-w-xs"
+                    onChange={(e) => setUpdateTitle(e.target.value)}
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 mb-2" for="productName">
+                  <label className="block text-gray-700 mb-2" htmlFor="author">
                     Author
                   </label>
                   <input
+                    id="author"
                     type="text"
                     className="input input-sm input-bordered w-full max-w-xs"
+                    onChange={(e) => setUpdateAuthor(e.target.value)}
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 mb-2" for="productName">
+                  <label
+                    className="block text-gray-700 mb-2"
+                    htmlFor="publishdate"
+                  >
                     Publish date
                   </label>
                   <input
+                    id="publishdate"
                     type="text"
                     className="input input-sm input-bordered w-full max-w-xs"
+                    onChange={(e) => setUpdatePublishDate(e.target.value)}
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 mb-2" for="productName">
+                  <label className="block text-gray-700 mb-2" htmlFor="price">
                     Price
                   </label>
                   <input
-                    type="text"
+                    id="price"
+                    type="number"
                     className="input input-sm input-bordered w-full max-w-xs"
+                    onChange={(e) => setUpdatePrice(e.target.value)}
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 mb-2" for="productName">
+                  <label
+                    className="block text-gray-700 mb-2"
+                    htmlFor="sysnopsis"
+                  >
                     Synopsis
                   </label>
                   <input
+                    id="synopsis"
                     type="text"
                     className="input input-sm input-bordered w-full max-w-xs"
+                    onChange={(e) => setUpdateDescription(e.target.value)}
                   />
                 </div>
               </div>
               <div className="modal-action">
                 <button
                   className="btn btn-sm btn-secondary border-0 text-md rounded capitalize"
-                  onClick={() => window.modal_update.showModal()}
+                  onClick={() => {
+                    updateBookById();
+                  }}
                 >
                   Update
                 </button>
@@ -158,15 +231,12 @@ export default function DashboardAbout() {
               <p className="py-4">Are you sure want to delete book ?</p>
               <div className="modal-action">
                 <button
-                  className="btn btn-sm btn-secondary border-0 text-md rounded capitalize"
-                  onClick={() => window.modal_delete.showModal()}
+                  className="btn btn-accent btn-sm border-0 text-md rounded capitalize"
+                  onClick={() => deleteBookById()}
                 >
                   delete
                 </button>
               </div>
-            </form>
-            <form method="dialog" className="modal-backdrop">
-              <button>close</button>
             </form>
           </dialog>
         </div>
