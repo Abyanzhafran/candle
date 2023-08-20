@@ -67,10 +67,16 @@ export default function DashboardAbout() {
                         >
                           details
                         </Link>
-                        <button className="btn btn-ghost btn-circle btn-sm">
+                        <button
+                          className="btn btn-ghost btn-circle btn-sm"
+                          onClick={() => window.modal_update.showModal()}
+                        >
                           <PencilSquareIcon className="text-gray-600 font-bold p-1" />
                         </button>
-                        <button className="btn btn-ghost btn-circle btn-sm">
+                        <button
+                          className="btn btn-ghost btn-circle btn-sm"
+                          onClick={() => window.modal_delete.showModal()}
+                        >
                           <TrashIcon className="text-gray-600 font-bold p-1" />
                         </button>
                       </div>
@@ -80,6 +86,89 @@ export default function DashboardAbout() {
               ))}
             </tbody>
           </table>
+          {/* modal update */}
+          <dialog id="modal_update" className="modal">
+            <form method="dialog" className="modal-box">
+              {/* <h3 className="font-bold text-lg">Update!</h3> */}
+              {/* <p className="py-4">Press ESC key or click outside to close</p> */}
+              <div className="flex flex-col gap-4">
+                <div>
+                  <label className="block text-gray-700 mb-2" for="productName">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-sm input-bordered w-full max-w-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 mb-2" for="productName">
+                    Author
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-sm input-bordered w-full max-w-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 mb-2" for="productName">
+                    Publish date
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-sm input-bordered w-full max-w-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 mb-2" for="productName">
+                    Price
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-sm input-bordered w-full max-w-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 mb-2" for="productName">
+                    Synopsis
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-sm input-bordered w-full max-w-xs"
+                  />
+                </div>
+              </div>
+              <div className="modal-action">
+                <button
+                  className="btn btn-sm btn-secondary border-0 text-md rounded capitalize"
+                  onClick={() => window.modal_update.showModal()}
+                >
+                  Update
+                </button>
+              </div>
+            </form>
+            <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+            </form>
+          </dialog>
+          {/* modal delete */}
+          <dialog id="modal_delete" className="modal">
+            <form method="dialog" className="modal-box">
+              <h3 className="font-bold text-lg">Delete</h3>
+              <p className="py-4">Are you sure want to delete book ?</p>
+              <div className="modal-action">
+                <button
+                  className="btn btn-sm btn-secondary border-0 text-md rounded capitalize"
+                  onClick={() => window.modal_delete.showModal()}
+                >
+                  delete
+                </button>
+              </div>
+            </form>
+            <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+            </form>
+          </dialog>
         </div>
       </div>
     </div>
