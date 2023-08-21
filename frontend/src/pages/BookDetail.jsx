@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-export default function DetailBook() {
+export default function BookDetail() {
   const [bookDetail, setBookDetail] = useState("");
   const api_url = import.meta.env.VITE_API_URL;
 
@@ -17,7 +17,7 @@ export default function DetailBook() {
   return (
     <div className="flex items-center justify-start w-full mt-8 pl-8 px-6">
       <div className="flex flex-wrap lg:flex-nowrap  gap-6">
-        <img src="http://127.0.0.1:8081/the hunger game.jpg" className="h-72" />
+        <img src={bookDetail.imageurl} className="h-72" />
         <div className="flex flex-col gap-1">
           <div>
             <span className="font-bold">Title : </span>

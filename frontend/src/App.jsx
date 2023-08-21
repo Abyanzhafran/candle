@@ -7,7 +7,7 @@ import BaseNavbar from "./components/BaseNavbar";
 import BaseDashboardLayout2 from "./components/BaseDashboardLayout2";
 import DashboardAddBook from "./pages/dashboardLayout/DashboardAddBook";
 import DashboardListBook from "./pages/dashboardLayout/DashboardListBook";
-import DetailBook from "./pages/DetailBook";
+import BookDetail from "./pages/BookDetail";
 
 export default function App() {
   return (
@@ -20,7 +20,7 @@ export default function App() {
         <Route path="signin" element={<SignIn />}></Route>
         <Route
           path="book-detail/books/:bookId"
-          element={<DetailBook />}
+          element={<BookDetail />}
         ></Route>
       </Routes>
       {/* Not used, but just in case, so i don't delete it */}
