@@ -57,7 +57,10 @@ export default function DashboardAbout() {
             : updatePrice,
       })
       .then((response) => {
-        console.log(response);
+        response.data.message === "Book updated"
+          ? alert("Book updated")
+          : alert("An error occured, cannot edit the book");
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);
@@ -68,7 +71,10 @@ export default function DashboardAbout() {
     axios
       .delete(api_url + `/books/${bookId}`)
       .then((response) => {
-        console.log(response);
+        response.data.message === "Book deleted"
+          ? alert("Book deleted")
+          : alert("An error occured, cannot delete the book");
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);
@@ -144,11 +150,12 @@ export default function DashboardAbout() {
           {/* modal update */}
           <dialog id="modal_update" className="modal">
             <form method="dialog" className="modal-box">
-              {/* <h3 className="font-bold text-lg">Update!</h3> */}
-              {/* <p className="py-4">Press ESC key or click outside to close</p> */}
               <div className="flex flex-col gap-4">
                 <div>
-                  <label className="block text-gray-700 mb-2" htmlFor="title">
+                  <label
+                    className="block text-gray-700 mb-1 text-md"
+                    htmlFor="title"
+                  >
                     Title
                   </label>
                   <input
@@ -159,7 +166,7 @@ export default function DashboardAbout() {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 mb-2" htmlFor="author">
+                  <label className="block text-gray-700 mb-1" htmlFor="author">
                     Author
                   </label>
                   <input
@@ -171,7 +178,7 @@ export default function DashboardAbout() {
                 </div>
                 <div>
                   <label
-                    className="block text-gray-700 mb-2"
+                    className="block text-gray-700 mb-1"
                     htmlFor="publishdate"
                   >
                     Publish date
@@ -184,7 +191,7 @@ export default function DashboardAbout() {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 mb-2" htmlFor="price">
+                  <label className="block text-gray-700 mb-1" htmlFor="price">
                     Price
                   </label>
                   <input
@@ -196,7 +203,7 @@ export default function DashboardAbout() {
                 </div>
                 <div>
                   <label
-                    className="block text-gray-700 mb-2"
+                    className="block text-gray-700 mb-1"
                     htmlFor="sysnopsis"
                   >
                     Synopsis
@@ -206,6 +213,30 @@ export default function DashboardAbout() {
                     type="text"
                     className="input input-sm input-bordered w-full max-w-xs"
                     onChange={(e) => setUpdateDescription(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <figure className="w-[190px]">
+                    <img
+                      src={
+                        booksData.find((x) => x.id === bookId) === undefined
+                          ? ""
+                          : booksData.find((x) => x.id === bookId).imageurl
+                      }
+                      className="h-48"
+                    />
+                  </figure>
+                </div>
+                <div>
+                  <label
+                    className="block text-gray-700 mb-1"
+                    htmlFor="sysnopsis"
+                  >
+                    Edit image
+                  </label>
+                  <input
+                    type="file"
+                    className="file-input file-input-bordered file-input-sm w-full max-w-xs"
                   />
                 </div>
               </div>
@@ -237,6 +268,9 @@ export default function DashboardAbout() {
                   delete
                 </button>
               </div>
+            </form>
+            <form method="dialog" className="modal-backdrop">
+              <button>close</button>
             </form>
           </dialog>
         </div>
