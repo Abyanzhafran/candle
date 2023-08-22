@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"candle-backend/models"
 	"candle-backend/repository"
@@ -126,6 +127,7 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 
 	// save image file - for developement version
 	imagePathBase := filepath.Join(uploadsFolder, file.Filename)
+
 	if err := ctx.SaveUploadedFile(file, imagePathBase); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
@@ -193,6 +195,39 @@ func (c *BookController) EditBook(ctx *gin.Context) {
 
 func (c *BookController) DeleteBook(ctx *gin.Context) {
 	id := ctx.Param("id")
+
+	book, err := c.repo.GetBookByID(id)
+
+	// delete the associated image file
+	if id != "" {
+		// check if is there any error for getting the book by id
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"status":  "error",
+				"message": "Can't get the book, there's some error",
+				"error":   err.Error(),
+			})
+		}
+
+		// in production mode
+		// change the local domain, with the production domain
+		// this things : http://127.0.0.1:8081
+		replaceDomainPath := strings.Replace(book.ImageUrl, "http://127.0.0.1:8081", "../uploaded_image", 1)
+
+		err := os.Remove(replaceDomainPath)
+
+		// Check if the associated can delete or not
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"status":  "error",
+				"message": "Error deleting image file from directory",
+				"error":   err.Error(),
+			})
+		}
+	}
+
+	// delete the book from database
+	// not including the image file
 	if err := c.repo.DeleteBook(id); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
