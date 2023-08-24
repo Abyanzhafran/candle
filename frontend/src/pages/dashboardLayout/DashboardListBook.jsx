@@ -33,28 +33,48 @@ export default function DashboardAbout() {
   }
 
   const updateBookById = () => {
+    const formData = new FormData();
+
+    formData.append(
+      "title",
+      updateTitle === ""
+        ? booksData.find((x) => x.id === bookId).title
+        : updateTitle
+    );
+    formData.append(
+      "description",
+      updateDescription === ""
+        ? booksData.find((x) => x.id === bookId).description
+        : updateDescription
+    );
+    formData.append(
+      "author",
+      updateAuthor === ""
+        ? booksData.find((x) => x.id === bookId).author
+        : updateAuthor
+    );
+    formData.append(
+      "publishdate",
+      updatePublishDate === ""
+        ? booksData.find((x) => x.id === bookId).publishdate
+        : updatePublishDate
+    );
+    formData.append(
+      "price",
+      updatePrice === 0
+        ? booksData.find((x) => x.id === bookId).price
+        : updatePrice
+    );
+    formData.append(
+      "imageurl",
+      booksData.find((x) => x.id === bookId).imageurl
+    );
+
     axios
-      .put(api_url + `/books/${bookId}`, {
-        title:
-          updateTitle === ""
-            ? booksData.find((x) => x.id === bookId).title
-            : updateTitle,
-        author:
-          updateAuthor === ""
-            ? booksData.find((x) => x.id === bookId).author
-            : updateAuthor,
-        description:
-          updateDescription === ""
-            ? booksData.find((x) => x.id === bookId).description
-            : updateDescription,
-        publishdate:
-          updatePublishDate === ""
-            ? booksData.find((x) => x.id === bookId).publishdate
-            : updatePublishDate,
-        price:
-          updatePrice === 0
-            ? booksData.find((x) => x.id === bookId).price
-            : updatePrice,
+      .put(api_url + `/books/${bookId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((response) => {
         response.data.message === "Book updated"
