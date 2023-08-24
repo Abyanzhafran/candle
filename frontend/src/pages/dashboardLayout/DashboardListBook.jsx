@@ -11,6 +11,7 @@ export default function DashboardAbout() {
   const [updateDescription, setUpdateDescription] = useState("");
   const [updatePublishDate, setUpdatePublishDate] = useState("");
   const [updatePrice, setUpdatePrice] = useState(0);
+  const [updateImageFile, setUpdateImageFile] = useState(null);
   const api_url = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -31,6 +32,14 @@ export default function DashboardAbout() {
       return str;
     }
   }
+
+  const handleFileChangeImageUpdate = (eventStatus) => {
+    if (eventStatus == null || eventStatus == undefined) {
+      setUpdateImageFile(null);
+    }
+
+    setUpdateImageFile(URL.createObjectURL(eventStatus));
+  };
 
   const updateBookById = () => {
     const formData = new FormData();
@@ -237,14 +246,7 @@ export default function DashboardAbout() {
                 </div>
                 <div>
                   <figure className="w-[190px]">
-                    <img
-                      src={
-                        booksData.find((x) => x.id === bookId) === undefined
-                          ? ""
-                          : booksData.find((x) => x.id === bookId).imageurl
-                      }
-                      className="h-48"
-                    />
+                    <img src={updateImageFile} className="h-auto max-h-48" />
                   </figure>
                 </div>
                 <div>
@@ -257,6 +259,9 @@ export default function DashboardAbout() {
                   <input
                     type="file"
                     className="file-input file-input-bordered file-input-sm w-full max-w-xs"
+                    onChange={(e) =>
+                      handleFileChangeImageUpdate(e.target.files[0])
+                    }
                   />
                 </div>
               </div>
