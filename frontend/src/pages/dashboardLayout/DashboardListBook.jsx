@@ -11,6 +11,9 @@ export default function DashboardAbout() {
   const [updateDescription, setUpdateDescription] = useState("");
   const [updatePublishDate, setUpdatePublishDate] = useState("");
   const [updatePrice, setUpdatePrice] = useState(0);
+
+  const [updateImageUrl, setUpdateImageUrl] = useState(false);
+  const [updateImageFilePreview, setUpdateImageFilePreview] = useState(null);
   const [updateImageFile, setUpdateImageFile] = useState(null);
   const api_url = import.meta.env.VITE_API_URL;
 
@@ -35,11 +38,16 @@ export default function DashboardAbout() {
 
   const handleFileChangeImageUpdate = (eventStatus) => {
     if (eventStatus == null || eventStatus == undefined) {
-      setUpdateImageFile(null);
+      setUpdateImageFilePreview(null);
+      setUpdateImageUrl(false);
     }
 
-    setUpdateImageFile(URL.createObjectURL(eventStatus));
+    setUpdateImageFilePreview(URL.createObjectURL(eventStatus));
+    setUpdateImageUrl(true);
   };
+
+  console.log("log : ", updateImageFile);
+  console.log("log imgurl : ", updateImageUrl);
 
   const updateBookById = () => {
     const formData = new FormData();
@@ -76,7 +84,13 @@ export default function DashboardAbout() {
     );
     formData.append(
       "imageurl",
-      booksData.find((x) => x.id === bookId).imageurl
+      updateImageUrl === false
+        ? booksData.find((x) => x.id === bookId).imageurl // not updated
+        : "" // updated
+    );
+    formData.append(
+      "imagefile",
+      updateImageFile === null ? null : updateImageFile
     );
 
     axios
@@ -246,7 +260,10 @@ export default function DashboardAbout() {
                 </div>
                 <div>
                   <figure className="w-[190px]">
-                    <img src={updateImageFile} className="h-auto max-h-48" />
+                    <img
+                      src={updateImageFilePreview}
+                      className="h-auto max-h-48"
+                    />
                   </figure>
                 </div>
                 <div>
@@ -259,9 +276,10 @@ export default function DashboardAbout() {
                   <input
                     type="file"
                     className="file-input file-input-bordered file-input-sm w-full max-w-xs"
-                    onChange={(e) =>
-                      handleFileChangeImageUpdate(e.target.files[0])
-                    }
+                    onChange={(e) => {
+                      handleFileChangeImageUpdate(e.target.files[0]);
+                      setUpdateImageFile(e.target.files[0]);
+                    }}
                   />
                 </div>
               </div>
