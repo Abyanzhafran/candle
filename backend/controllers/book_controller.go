@@ -165,7 +165,7 @@ func (c *BookController) AddBook(ctx *gin.Context) {
 func (c *BookController) EditBook(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	book, err := c.repo.GetBookByID(id)
+	_, err := c.repo.GetBookByID(id)
 
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
@@ -174,98 +174,91 @@ func (c *BookController) EditBook(ctx *gin.Context) {
 		})
 		return
 	}
-	// NEW TASK :
-	// Checking if the image the same or not
-	// if the same, it means the user not updating the imaeg
-	// but if the image different, it means the user updating the image
 
-	// TASK ANSWER :
-	// to diffrentiate the image just compare the path
-	// because the path contain the domain + uuid(soon) + filename
+	logVal := ctx.PostForm("imageurl")
+	log.Println("logging : ", logVal)
+	// // NEW TASK :
+	// // Checking if the image the same or not
+	// // if the same, it means the user not updating the imaeg
+	// // but if the image different, it means the user updating the image
 
-	var validationData struct {
-		ImageUrl string `json:"imageurl" form:"imageurl"`
-	}
+	// // TASK ANSWER :
+	// // to diffrentiate the image just check if file(image) nil or not
+	// // if file != nil, users updated file image
+	// // vice versa
 
-	// check if the incoming request from frontend error not
-	if err := ctx.ShouldBind(&validationData); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": "Can't retrieve data from frontend",
-			"error":   err.Error(),
-		})
-		return
-	}
+	// file, _ := ctx.FormFile("imagefile")
 
-	// check if the validation data from frontend the same with data from database or not
-	if validationData.ImageUrl != book.ImageUrl {
-		log.Println("img url doesn't the same")
-	}
+	// if file != nil {
+	// 	// replacing the domain
+	// 	// to check the image file in you directory
+	// 	replaceDomainPath := strings.Replace(book.ImageUrl, "http://127.0.0.1:8081", "../uploaded_image", 1)
 
-	// replacing the domain
-	// to check the image file in you directory
-	replaceDomainPath := strings.Replace(book.ImageUrl, "http://127.0.0.1:8081", "../uploaded_image", 1)
+	// 	// check if the associated image can delete or not
+	// 	if err := os.Remove(replaceDomainPath); err != nil {
+	// 		ctx.JSON(http.StatusInternalServerError, gin.H{
+	// 			"status":  "error",
+	// 			"message": "Error deleting image file from directory",
+	// 			"error":   err.Error(),
+	// 		})
+	// 	}
 
-	// check if the associated image can delete or not
-	if err := os.Remove(replaceDomainPath); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": "Error deleting image file from directory",
-			"error":   err.Error(),
-		})
-	}
+	// 	// handling upload image
+	// 	file, err := ctx.FormFile("imagefile")
+	// 	if err != nil {
+	// 		ctx.JSON(http.StatusBadRequest, gin.H{
+	// 			"status":  "error",
+	// 			"message": "failed uploading the image",
+	// 		})
+	// 		return
+	// 	}
 
-	// handling upload image
-	file, err := ctx.FormFile("imagefile")
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": "failed uploading the image",
-		})
-		return
-	}
+	// 	// make uploaded_image folder if it's doesn't exist
+	// 	uploadsFolder := "../uploaded_image"
 
-	// make uploaded_image folder if it's doesn't exist
-	uploadsFolder := "../uploaded_image"
+	// 	// save image file - for developement version
+	// 	imagePathBase := filepath.Join(uploadsFolder, file.Filename)
 
-	// save image file - for developement version
-	imagePathBase := filepath.Join(uploadsFolder, file.Filename)
+	// 	if err := ctx.SaveUploadedFile(file, imagePathBase); err != nil {
+	// 		ctx.JSON(http.StatusInternalServerError, gin.H{
+	// 			"status":  "error",
+	// 			"message": "Upload image error",
+	// 			"error":   err.Error(),
+	// 		})
+	// 		return
+	// 	}
 
-	if err := ctx.SaveUploadedFile(file, imagePathBase); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": "Upload image error",
-			"error":   err.Error(),
-		})
-		return
-	}
+	// 	// fill the imageUrl struct(models) with the imageUrl value
+	// 	// you can add you domain like this if you want
+	// 	// book.ImageUrl = "http://your-domain.com/" + imagePath
+	// 	// you can change this line for dev mode or prod mode
+	// 	imageId, _ := uuid.NewRandom()
+	// 	book.ImageUrl = "http://127.0.0.1:8081/" + imageId.String() + file.Filename
+	// }
 
-	// fill the imageUrl struct(models) with the imageUrl value
-	// you can add you domain like this if you want
-	// book.ImageUrl = "http://your-domain.com/" + imagePath
-	// you can change this line for dev mode or prod mode
-	book.ImageUrl = "http://127.0.0.1:8081/" + file.Filename
+	// //
+	// book.ImageUrl =
 
-	if err := ctx.ShouldBind(&book); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": err.Error(),
-		})
-		return
-	}
+	// if err := ctx.ShouldBind(&book); err != nil {
+	// 	ctx.JSON(http.StatusBadRequest, gin.H{
+	// 		"status":  "error",
+	// 		"message": err.Error(),
+	// 	})
+	// 	return
+	// }
 
-	if err := c.repo.EditBook(book); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": err.Error(),
-		})
-		return
-	}
+	// if err := c.repo.EditBook(book); err != nil {
+	// 	ctx.JSON(http.StatusInternalServerError, gin.H{
+	// 		"status":  "error",
+	// 		"message": err.Error(),
+	// 	})
+	// 	return
+	// }
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"status":  "ok",
-		"message": "Book updated",
-	})
+	// ctx.JSON(http.StatusOK, gin.H{
+	// 	"status":  "ok",
+	// 	"message": "Book updated",
+	// })
 }
 
 func (c *BookController) DeleteBook(ctx *gin.Context) {
