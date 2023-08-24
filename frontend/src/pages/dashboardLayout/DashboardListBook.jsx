@@ -46,9 +46,6 @@ export default function DashboardAbout() {
     setUpdateImageUrl(true);
   };
 
-  console.log("log : ", updateImageFile);
-  console.log("log imgurl : ", updateImageUrl);
-
   const updateBookById = () => {
     const formData = new FormData();
 
