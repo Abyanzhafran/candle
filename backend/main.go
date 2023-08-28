@@ -32,6 +32,7 @@ func main() {
 
 	r.Use(CORS())
 
+	router.UserRouter(r)
 	router.BookRouter(r)
 
 	if err := r.Run(); err != nil {
