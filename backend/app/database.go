@@ -25,7 +25,7 @@ func NewDB() *gorm.DB {
 	}
 
 	// auto-migrate model book
-	db.AutoMigrate(&models.Book{})
+	db.AutoMigrate(&models.User{}, &models.Book{})
 	if err != nil {
 		log.Fatalf("failed to auto migrate: %v", err)
 	}
