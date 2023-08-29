@@ -16,10 +16,11 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 
 func (r *UserRepository) GetAllUsers() ([]*models.User, error) {
 	var users []*models.User
-	// write ORM
+
 	if err := r.db.Find(&users).Error; err != nil {
 		return nil, err
 	}
+
 	return users, nil
 }
 
@@ -27,16 +28,6 @@ func (r *UserRepository) GetUserByUsername(username string) (*models.User, error
 	var user models.User
 
 	if err := r.db.Where("username = ?", username).First(&user).Error; err != nil {
-		return nil, err
-	}
-
-	return &user, nil
-}
-
-func (r *UserRepository) Login(username string) (*models.User, error) {
-	var user models.User
-
-	if err := r.db.Select("username", "password").Where("username = ?", username).First(&user).Error; err != nil {
 		return nil, err
 	}
 
