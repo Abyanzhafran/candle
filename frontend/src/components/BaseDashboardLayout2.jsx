@@ -4,6 +4,7 @@ import {
   PlusIcon,
   ClipboardDocumentListIcon,
 } from "@heroicons/react/24/outline";
+import Cookies from "js-cookie";
 import { Link, Outlet } from "react-router-dom";
 
 export default function BaseDashboardLayout2() {
@@ -20,6 +21,11 @@ export default function BaseDashboardLayout2() {
       link: "/dashboard2/dashboard-list-book",
     },
   ];
+
+  const logout = () => {
+    Cookies.remove("loggedIn");
+    window.location.reload();
+  };
 
   return (
     <>
@@ -82,11 +88,13 @@ export default function BaseDashboardLayout2() {
                   className="p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
                 >
                   <li>
-                    <Link to="https://inventory-mj-fe.vercel.app">
+                    {/* use link like this in production */}
+                    {/* <Link to="https://inventory-mj-fe.vercel.app">
                       Go to homepage
-                    </Link>
+                    </Link> */}
+                    <Link to="/">Go to homepage</Link>
                   </li>
-                  <li>
+                  <li onClick={logout}>
                     <a>Logout</a>
                   </li>
                 </ul>

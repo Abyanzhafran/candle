@@ -1,7 +1,13 @@
 import { Bars3Icon, ArrowDownIcon } from "@heroicons/react/24/solid";
 import { Link, Outlet } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function BaseNavbar() {
+  const logout = () => {
+    Cookies.remove("loggedIn");
+    window.location.reload();
+  };
+
   return (
     <>
       <div className="drawer drawer-mobile h-screen">
@@ -43,10 +49,8 @@ export default function BaseNavbar() {
                     Go to dashboard
                   </Link>
                 </li>
-                <li>
-                  <Link to="/signin" className="text-gray-800">
-                    Logout
-                  </Link>
+                <li onClick={logout}>
+                  <a>Logout</a>
                 </li>
               </ul>
             </div>
