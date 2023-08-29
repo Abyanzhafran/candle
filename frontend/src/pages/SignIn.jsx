@@ -1,24 +1,36 @@
 import { useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export default function SignIn() {
-  const [usernameAuth, setUsernameAuth] = useState("");
-  const [passwordAuth, setPasswordAuth] = useState("");
+  const [usernameData, setUsernameData] = useState("");
+  const [passwordData, setPasswordData] = useState("");
 
   const api_url = import.meta.env.VITE_API_URL;
 
   const auth = () => {
     axios
-      .get(api_url + `/books`, {
-        headers: {
-          Authorization: `Basic ${btoa(`${usernameAuth}:${passwordAuth}`)}`,
-        },
-      })
+      .get(
+        api_url +
+          `/user/login?username=${usernameData}&password=${passwordData}`,
+        {
+          username: usernameData,
+          password: passwordData,
+        }
+      )
       .then((response) => {
-        console.log(response.data);
+        if (response.data.message === "Login succesfully") {
+          Cookies.set("loggedIn", "true"); // set the cookie
+          window.location.href = "/";
+        } else if (response.data.message === "Unauthorized") {
+          alert(response.data.message);
+        }
       })
       .catch((error) => {
+        console.log(error.response.data.message);
         console.log(error);
+        // use this instead in production
+        // console.error("An error occured : ", error);
       });
   };
 
@@ -37,13 +49,13 @@ export default function SignIn() {
               type="text"
               placeholder="Username"
               className="input input-bordered border-gray-300 w-full max-w-xs bg-gray-100"
-              onChange={(e) => setUsernameAuth(e.target.value)}
+              onChange={(e) => setUsernameData(e.target.value)}
             />
             <input
               type="password"
               placeholder="Password"
               className="input input-bordered border-gray-300 w-full max-w-xs bg-gray-100"
-              onChange={(e) => setPasswordAuth(e.target.value)}
+              onChange={(e) => setPasswordData(e.target.value)}
             />
           </div>
           <button
