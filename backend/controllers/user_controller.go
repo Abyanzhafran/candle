@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"candle-backend/repository"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -50,23 +51,50 @@ func (c *UserController) GetUserByUsername(ctx *gin.Context) {
 	})
 }
 
-func (c *UserController) UserLogin(ctx *gin.Context) map[string]string {
-	incomingUsername := ctx.Param("username")
+func (c *UserController) UserLogin(ctx *gin.Context) {
+	incomingUsername := ctx.Query("username")
+	incomingPassword := ctx.Query("password")
 
-	users, err := c.repo.Login(incomingUsername)
+	log.Println("log user : ", incomingUsername)
+	log.Println("log pass : ", incomingPassword)
+
+	if incomingUsername == "" || incomingPassword == "" {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"status":  "error",
+			"message": "Username or password can't be null",
+		})
+		ctx.Abort()
+		return
+	}
+
+	dbData, err := c.repo.GetUserByUsername(incomingUsername)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		log.Println("Error get user data from database : ", err)
+		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"status":  "error",
-			"message": err.Error(),
+			"message": "Username not found",
 		})
-		return nil
+		ctx.Abort()
+		return
 	}
 
-	userData := *users
-	res := map[string]string{
-		userData.Username: userData.Password,
+	if !checkPassword(incomingPassword, *&dbData.Password) {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"status":  "error",
+			"message": "Unauthorized",
+		})
+		ctx.Abort()
+		return
 	}
 
-	return res
+	ctx.JSON(http.StatusOK, gin.H{
+		"status":  "ok",
+		"message": "Login succesfully",
+	})
+}
+
+// for support UserLogin func
+func checkPassword(inputPassword, dbPassword string) bool {
+	return inputPassword == dbPassword
 }
