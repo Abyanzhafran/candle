@@ -1,4 +1,4 @@
-import { Bars3Icon, ArrowDownIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon } from "@heroicons/react/24/solid";
 import { Link, Outlet } from "react-router-dom";
 import Cookies from "js-cookie";
 

@@ -14,23 +14,16 @@ export default function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<BaseNavbar />}>
-          <Route
-            path=""
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route
-            path="about"
-            element={
-              <ProtectedRoute>
-                <About />
-              </ProtectedRoute>
-            }
-          ></Route>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <BaseNavbar />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="" element={<Home />}></Route>
+          <Route path="about" element={<About />}></Route>
         </Route>
         <Route path="signin" element={<SignIn />}></Route>
         <Route

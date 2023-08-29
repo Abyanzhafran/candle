@@ -22,12 +22,17 @@ export default function SignIn() {
         if (response.data.message === "Login succesfully") {
           Cookies.set("loggedIn", "true"); // set the cookie
           window.location.href = "/";
-        } else if (response.data.message === "Unauthorized") {
-          alert(response.data.message);
         }
       })
       .catch((error) => {
-        console.log(error.response.data.message);
+        if (error.response.data.message === "Unauthorized") {
+          alert(error.response.data.message);
+        } else if (error.response.data.message === "Username not found") {
+          alert(error.response.data.message);
+        } else if (error.response.data.message === "Unauthorized") {
+          alert(error.response.data.message);
+        }
+        console.log("err log : ", error.response.data.message);
         console.log(error);
         // use this instead in production
         // console.error("An error occured : ", error);
