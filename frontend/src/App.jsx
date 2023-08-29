@@ -8,14 +8,29 @@ import BaseDashboardLayout2 from "./components/BaseDashboardLayout2";
 import DashboardAddBook from "./pages/dashboardLayout/DashboardAddBook";
 import DashboardListBook from "./pages/dashboardLayout/DashboardListBook";
 import BookDetail from "./pages/BookDetail";
+import ProtectedRoute from "./router/ProtectedRoute";
 
 export default function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<BaseNavbar />}>
-          <Route path="" element={<Home />}></Route>
-          <Route path="about" element={<About />}></Route>
+          <Route
+            path=""
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="about"
+            element={
+              <ProtectedRoute>
+                <About />
+              </ProtectedRoute>
+            }
+          ></Route>
         </Route>
         <Route path="signin" element={<SignIn />}></Route>
         <Route
@@ -33,10 +48,21 @@ export default function App() {
       {/* till here */}
       <Routes>
         <Route path="/dashboard2" element={<BaseDashboardLayout2 />}>
-          <Route path="" element={<DashboardAddBook />}></Route>
+          <Route
+            path=""
+            element={
+              <ProtectedRoute>
+                <DashboardAddBook />
+              </ProtectedRoute>
+            }
+          ></Route>
           <Route
             path="dashboard-list-book"
-            element={<DashboardListBook />}
+            element={
+              <ProtectedRoute>
+                <DashboardListBook />
+              </ProtectedRoute>
+            }
           ></Route>
         </Route>
       </Routes>
