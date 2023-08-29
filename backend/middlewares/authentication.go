@@ -25,16 +25,14 @@ func AuthMiddleware(userRepo *repository.UserRepository) gin.HandlerFunc {
 		dbData, err := userRepo.GetUserByUsername(user)
 
 		if err != nil {
-			log.Println("error log : ", err)
+			log.Println("Error get user data from database : ", err)
+			ctx.JSON(http.StatusUnauthorized, gin.H{
+				"status":  "error",
+				"message": "Unauthorized",
+			})
 		}
 
-		// log the data
-		log.Println("log inUser : ", user)
-		log.Println("log inPass : ", password)
-		log.Println("log hasAuth : ", hasAuth)
-		log.Println("log dbData : ", *&dbData.Username)
-
-		if err != nil || !checkPassword(password, *&dbData.Password) {
+		if !checkPassword(password, *&dbData.Password) {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
 				"status":  "error",
 				"message": "Unauthorized",
@@ -42,6 +40,12 @@ func AuthMiddleware(userRepo *repository.UserRepository) gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
+
+		// store authenticated user data in context
+		ctx.Set("authenticated user", dbData)
+
+		// continue to the next handler/middleware
+		ctx.Next()
 	}
 }
 
