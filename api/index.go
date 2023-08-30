@@ -1,11 +1,15 @@
-package main
+package api
 
 import (
-	"log"
+	"net/http"
 
 	"candle-backend/router"
 
 	"github.com/gin-gonic/gin"
+)
+
+var (
+	app *gin.Engine
 )
 
 // cors custom function
@@ -27,15 +31,16 @@ func CORS() gin.HandlerFunc {
 	}
 }
 
-func main() {
-	r := gin.Default()
+func init() {
+	app = gin.New()
 
-	r.Use(CORS())
+	app.Use(CORS())
 
-	router.UserRouter(r)
-	router.BookRouter(r)
+	router.UserRouter(app)
+	router.BookRouter(app)
+}
 
-	if err := r.Run(); err != nil {
-		log.Fatalf("failed to start server: ")
-	}
+// entry point
+func Handler(w http.ResponseWriter, r *http.Request) {
+	app.ServeHTTP(w, r)
 }
