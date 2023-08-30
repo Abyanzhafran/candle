@@ -4,11 +4,5 @@
       "GO_BUILD_FLAGS": "-ldflags '-s -w'"
     }
   },
-  "trailingSlash": false,
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/main.go"
-    }
-  ]
+  "trailingSlash": false
 }
