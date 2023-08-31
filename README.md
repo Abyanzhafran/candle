@@ -1,6 +1,6 @@
 # Candle
 
-This is a sample project demonstrating how to create a RESTful API using the Go programming language with the Gin web framework and GORM for database interactions.
+This is a project demonstrating RESTful API using the Go programming language with the Gin web framework and GORM for database interactions.
 
 ## Prerequisites
 
