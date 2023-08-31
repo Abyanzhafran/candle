@@ -55,9 +55,6 @@ func (c *UserController) UserLogin(ctx *gin.Context) {
 	incomingUsername := ctx.Query("username")
 	incomingPassword := ctx.Query("password")
 
-	log.Println("log user : ", incomingUsername)
-	log.Println("log pass : ", incomingPassword)
-
 	if incomingUsername == "" || incomingPassword == "" {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"status":  "error",
