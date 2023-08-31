@@ -1,0 +1,212 @@
+swagger: "2.0"
+info:
+  description: "API documentation for User and Book services"
+  version: "1.0.0"
+  title: "User and Book API"
+basePath: "/localhost:8080"
+schemes:
+  - "http"
+  - "https"
+
+paths:
+  /user/normal/login:
+    get:
+      tags:
+        - "User"
+      summary: "User Login"
+      parameters:
+        - name: "username"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "password"
+          in: "query"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful login"
+
+  /user/normal:
+    get:
+      tags:
+        - "User"
+      summary: "Get All Users"
+      responses:
+        200:
+          description: "Successful retrieval of users"
+
+  /user/normal/{username}:
+    get:
+      tags:
+        - "User"
+      summary: "Get User by Username"
+      parameters:
+        - name: "username"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful retrieval of user"
+
+        404:
+          description: "User not found"
+
+  /user/normal/{username}/login:
+    get:
+      tags:
+        - "User"
+      summary: "User Login"
+      parameters:
+        - name: "username"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "password"
+          in: "query"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful login"
+
+        401:
+          description: "Unauthorized"
+
+  /book/normal:
+    get:
+      tags:
+        - "Book"
+      summary: "Find All Books"
+      responses:
+        200:
+          description: "Successful retrieval of books"
+
+  /book/normal/{id}:
+    get:
+      tags:
+        - "Book"
+      summary: "Get Book by ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful retrieval of book"
+
+        404:
+          description: "Book not found"
+
+  /book/admin:
+    post:
+      tags:
+        - "Book"
+      summary: "Add Book (Admin)"
+      consumes:
+        - "multipart/form-data"
+      parameters:
+        - in: "formData"
+          name: "imagefile"
+          type: "file"
+          required: true
+        - in: "formData"
+          name: "other form fields"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Book added successfully"
+
+        400:
+          description: "Check your input data"
+
+        500:
+          description: "Error generating uuid or uploading image"
+
+  /book/admin/{id}:
+    put:
+      tags:
+        - "Book"
+      summary: "Edit Book (Admin)"
+      consumes:
+        - "multipart/form-data"
+      parameters:
+        - in: "path"
+          name: "id"
+          type: "string"
+          required: true
+        - in: "formData"
+          name: "imagefile"
+          type: "file"
+        - in: "formData"
+          name: "imageurl"
+          type: "string"
+        - in: "formData"
+          name: "other form fields"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Book updated successfully"
+
+        400:
+          description: "Check your input data"
+
+        422:
+          description: "Upload image error"
+
+        500:
+          description: "Error deleting or updating book"
+
+    delete:
+      tags:
+        - "Book"
+      summary: "Delete Book (Admin)"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Book deleted successfully"
+
+        500:
+          description: "Error deleting book or image file"
+
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: string
+      username:
+        type: string
+      password:
+        type: string
+      userrole:
+        type: string
+
+  Book:
+    type: object
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      author:
+        type: string
+      description:
+        type: string
+      publishdate:
+        type: string
+        format: date
+      imageurl:
+        type: string
+      price:
+        type: integer
+      imagefile:
+        type: string # Placeholder for the file path
