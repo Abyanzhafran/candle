@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AuthMiddleware(userRepo *repository.UserRepository) gin.HandlerFunc {
+func AuthMiddleware(userRepo *repository.UserRepository, requiredRole string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// get the data from frontend
 		user, password, hasAuth := ctx.Request.BasicAuth()
@@ -30,12 +30,24 @@ func AuthMiddleware(userRepo *repository.UserRepository) gin.HandlerFunc {
 				"status":  "error",
 				"message": "Unauthorized",
 			})
+			ctx.Abort()
+			return
 		}
 
 		if !checkPassword(password, *&dbData.Password) {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
 				"status":  "error",
 				"message": "Unauthorized",
+			})
+			ctx.Abort()
+			return
+		}
+
+		// check specific role for user
+		if dbData.UserRole != requiredRole {
+			ctx.JSON(http.StatusForbidden, gin.H{
+				"status":  "error",
+				"message": "Insufficient permissions",
 			})
 			ctx.Abort()
 			return
