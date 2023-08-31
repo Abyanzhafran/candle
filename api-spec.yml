@@ -2,15 +2,16 @@ swagger: "2.0"
 info:
   description: "API documentation for User and Book services"
   version: "1.0.0"
-  title: "User and Book API"
+  title: "User and Book API, (Candle)"
 basePath: "/localhost:8080"
 schemes:
   - "http"
-  - "https"
 
 paths:
   /user/normal/login:
     get:
+      security:
+        - BasicAuth: []
       tags:
         - "User"
       summary: "User Login"
@@ -29,6 +30,8 @@ paths:
 
   /user/normal:
     get:
+      security:
+        - BasicAuth: []
       tags:
         - "User"
       summary: "Get All Users"
@@ -38,6 +41,8 @@ paths:
 
   /user/normal/{username}:
     get:
+      security:
+        - BasicAuth: []
       tags:
         - "User"
       summary: "Get User by Username"
@@ -55,6 +60,8 @@ paths:
 
   /user/normal/{username}/login:
     get:
+      security:
+        - BasicAuth: []
       tags:
         - "User"
       summary: "User Login"
@@ -76,6 +83,8 @@ paths:
 
   /book/normal:
     get:
+      security:
+        - BasicAuth: []
       tags:
         - "Book"
       summary: "Find All Books"
@@ -85,6 +94,8 @@ paths:
 
   /book/normal/{id}:
     get:
+      security:
+        - BasicAuth: []
       tags:
         - "Book"
       summary: "Get Book by ID"
@@ -102,6 +113,8 @@ paths:
 
   /book/admin:
     post:
+      security:
+        - BasicAuth: []
       tags:
         - "Book"
       summary: "Add Book (Admin)"
@@ -109,13 +122,29 @@ paths:
         - "multipart/form-data"
       parameters:
         - in: "formData"
+          name: "title"
+          type: "string"
+          required: false
+        - in: "formData"
+          name: "description"
+          type: "string"
+          required: false
+        - in: "formData"
+          name: "author"
+          type: "string"
+          required: false
+        - in: "formData"
+          name: "publishdate"
+          type: "string"
+          required: false
+        - in: "formData"
+          name: "price"
+          type: "integer"
+          required: false
+        - in: "formData"
           name: "imagefile"
           type: "file"
-          required: true
-        - in: "formData"
-          name: "other form fields"
-          type: "string"
-          required: true
+          required: false
       responses:
         200:
           description: "Book added successfully"
@@ -128,26 +157,38 @@ paths:
 
   /book/admin/{id}:
     put:
+      security:
+        - BasicAuth: []
       tags:
         - "Book"
       summary: "Edit Book (Admin)"
       consumes:
         - "multipart/form-data"
       parameters:
-        - in: "path"
-          name: "id"
+        - in: "formData"
+          name: "title"
           type: "string"
-          required: true
+          required: false
+        - in: "formData"
+          name: "description"
+          type: "string"
+          required: false
+        - in: "formData"
+          name: "author"
+          type: "string"
+          required: false
+        - in: "formData"
+          name: "publishdate"
+          type: "string"
+          required: false
+        - in: "formData"
+          name: "price"
+          type: "integer"
+          required: false
         - in: "formData"
           name: "imagefile"
           type: "file"
-        - in: "formData"
-          name: "imageurl"
-          type: "string"
-        - in: "formData"
-          name: "other form fields"
-          type: "string"
-          required: true
+          required: false
       responses:
         200:
           description: "Book updated successfully"
@@ -162,6 +203,8 @@ paths:
           description: "Error deleting or updating book"
 
     delete:
+      security:
+        - BasicAuth: []
       tags:
         - "Book"
       summary: "Delete Book (Admin)"
@@ -209,4 +252,4 @@ definitions:
       price:
         type: integer
       imagefile:
-        type: string # Placeholder for the file path
+        type: multipart/form-data # Placeholder for the file path
