@@ -17,14 +17,17 @@ func BookRouter(router *gin.Engine) {
 
 	BookCtrl := controllers.NewBookController(bookRepo)
 
-	bookRouter := router.Group("/admin", middlewares.AuthMiddleware(userRepo))
+	// main book router group
+	bookRouter := router.Group("/book")
 
-	bookRouter.GET("/books", BookCtrl.FindAll)
-	// without authorization
-	router.GET("/:id", BookCtrl.GetBookByID)
+	// normal-user
+	normalBookRouter := bookRouter.Group("/normal", middlewares.AuthMiddleware(userRepo, "normal"))
+	normalBookRouter.GET("/:id", BookCtrl.GetBookByID)
+	normalBookRouter.GET("", BookCtrl.FindAll)
 
-	// with authorization
-	bookRouter.POST("", BookCtrl.AddBook)
-	bookRouter.PUT("/:id", BookCtrl.EditBook)
-	bookRouter.DELETE("/:id", BookCtrl.DeleteBook)
+	// admin-user
+	adminBookRouter := bookRouter.Group("/admin", middlewares.AuthMiddleware(userRepo, "admin"))
+	adminBookRouter.POST("", BookCtrl.AddBook)
+	adminBookRouter.PUT("/:id", BookCtrl.EditBook)
+	adminBookRouter.DELETE("/:id", BookCtrl.DeleteBook)
 }
