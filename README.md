@@ -1,11 +1,12 @@
 # Candle
 
-This is a sample project demonstrating how to create a RESTful API using the Go programming language with the Gin web framework and GORM for database interactions.
+This is a project demonstrating RESTful API using the Go programming language with the Gin web framework and GORM for database interactions.
 
 ## Prerequisites
 
 - Go installed on your machine
 - Mysql RDBMS installed on your machine
+- npm http-server installed globally in your machine
 
 ## Installation
 
@@ -39,8 +40,12 @@ This is a sample project demonstrating how to create a RESTful API using the Go 
    ```bash
    go run main.go
    ```
+2. Run file storage server:
 
-2. The API will be available at `http://localhost:8080`.
+   ```bash
+   http-server -p 8081
+   ```
+3. The Go API will be available at `http://localhost:8080`.
 
 ## Endpoints
 
@@ -57,4 +62,5 @@ This is a sample project demonstrating how to create a RESTful API using the Go 
 
 ## Notes
 
-- When you try to update the book in postman using PUT method and for example you don't want to update the image, then don't include the image as form-data.
+- When you try to update the book data in postman using PUT method and for example you don't want to update the image file, then don't include the image file as form-data, and keep the "imageurl" field the same as related image file in database.
+- When you try to update the book data in postman using PUT method and for example you want to update the image file also, then include the image file and make the "imageurl" field as empty string like this "".
