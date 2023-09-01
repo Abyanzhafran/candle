@@ -6,6 +6,7 @@ This is a project demonstrating RESTful API using the Go programming language wi
 
 - Go installed on your machine
 - Mysql RDBMS installed on your machine
+- npm http-server installed globally in your machine
 
 ## Installation
 
@@ -39,8 +40,12 @@ This is a project demonstrating RESTful API using the Go programming language wi
    ```bash
    go run main.go
    ```
+2. Run file storage server:
 
-2. The API will be available at `http://localhost:8080`.
+   ```bash
+   http-server -p 8081
+   ```
+3. The Go API will be available at `http://localhost:8080`.
 
 ## Endpoints
 
