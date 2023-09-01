@@ -184,15 +184,6 @@ func (c *BookController) EditBook(ctx *gin.Context) {
 		// to check the image file in you directory
 		replaceDomainPath := strings.Replace(book.ImageUrl, "http://127.0.0.1:8081", "../uploaded_image", 1)
 
-		// check if the associated image can delete or not
-		if err := os.Remove(replaceDomainPath); err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"status":  "error",
-				"message": "Error deleting image file from directory",
-				"error":   err.Error(),
-			})
-		}
-
 		// binding incoming data
 		// the data with specific field already change before
 		if err := ctx.ShouldBind(&book); err != nil {
@@ -213,7 +204,50 @@ func (c *BookController) EditBook(ctx *gin.Context) {
 			return
 		}
 
-		// make uploaded_image folder if it's doesn't exist
+		// IMAGE VALIDATION
+		// set file size limit for the image
+		maxFileSize := int64(5 << 20) // 5 MB
+
+		// validate max file size
+		if file.Size > maxFileSize {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"status":  "error",
+				"message": "File size limit exceeded",
+			})
+			return
+		}
+
+		// allowed file extension
+		allowedExtension := []string{".png", ".jpeg", ".jpg"}
+		ext := filepath.Ext(file.Filename)
+
+		// check isValid
+		isValid := false
+		for _, data := range allowedExtension {
+			// the default value is true
+			if strings.Contains(ext, data) {
+				isValid = true
+			}
+		}
+
+		if !isValid {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"status":  "error",
+				"message": "Prohibited file extension",
+			})
+			return
+		}
+		// END IMAGE VALIDATION
+
+		// check whether the associated image can be deleted or not
+		if err := os.Remove(replaceDomainPath); err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"status":  "error",
+				"message": "Error deleting image file from directory",
+				"error":   err.Error(),
+			})
+		}
+
 		uploadsFolder := "../uploaded_image"
 
 		// fill the imageUrl struct(models) with the imageUrl value
