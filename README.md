@@ -57,4 +57,5 @@ This is a project demonstrating RESTful API using the Go programming language wi
 
 ## Notes
 
-- When you try to update the book in postman using PUT method and for example you don't want to update the image, then don't include the image as form-data.
+- When you try to update the book data in postman using PUT method and for example you don't want to update the image file, then don't include the image file as form-data, and keep the "imageurl" field the same as related image file in database.
+- When you try to update the book data in postman using PUT method and for example you want to update the image file also, then include the image file and make the "imageurl" field as empty string like this "".
