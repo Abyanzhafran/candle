@@ -56,9 +56,8 @@ This is a project demonstrating RESTful API using the Go programming language wi
 - It can CRUD book entity based on provided endpoint on apis-spec.yml
 - The user entity have Ge tAllUsers, GetUserByUsername, and UserLogin api endpoint.
 - There are an image_data folder and uploaded_image folder.
-- The image_data folder is just the example book images that you can use for updating the book an.
+- The image_data folder is just the example book images that you can use for updating the book.
 - The uploaded_image folder, is used to visualize online file storage, so the added book cover, saved at that folder. It also applies to CRUD method for the images.
-  ``
 
 ## Notes
 
