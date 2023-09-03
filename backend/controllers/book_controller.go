@@ -8,6 +8,7 @@ import (
 
 	"candle-backend/models"
 	"candle-backend/repository"
+	"candle-backend/usecase"
 
 	"github.com/google/uuid"
 
@@ -194,59 +195,14 @@ func (c *BookController) EditBook(ctx *gin.Context) {
 			return
 		}
 
-		// handling upload image
-		file, err := ctx.FormFile("imagefile")
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"status":  "error",
-				"message": "failed uploading the image",
-			})
+		file := usecase.HandleImageUpload(ctx)
+
+		if file == nil {
 			return
 		}
-
-		// IMAGE VALIDATION
-		// set file size limit for the image
-		maxFileSize := int64(5 << 20) // 5 MB
-
-		// validate max file size
-		if file.Size > maxFileSize {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"status":  "error",
-				"message": "File size limit exceeded",
-			})
-			return
-		}
-
-		// allowed file extension
-		allowedExtension := []string{".png", ".jpeg", ".jpg"}
-		ext := filepath.Ext(file.Filename)
-
-		// check isValid
-		isValid := false
-		for _, data := range allowedExtension {
-			// the default value is true
-			if strings.Contains(ext, data) {
-				isValid = true
-			}
-		}
-
-		if !isValid {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"status":  "error",
-				"message": "Prohibited file extension",
-			})
-			return
-		}
-		// END IMAGE VALIDATION
 
 		// check whether the associated image can be deleted or not
-		if err := os.Remove(replaceDomainPath); err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"status":  "error",
-				"message": "Error deleting image file from directory",
-				"error":   err.Error(),
-			})
-		}
+		usecase.DeleteImageByPath(ctx, replaceDomainPath)
 
 		uploadsFolder := "../uploaded_image"
 
@@ -254,22 +210,10 @@ func (c *BookController) EditBook(ctx *gin.Context) {
 		// you can add you domain like this if you want
 		// book.ImageUrl = "http://your-domain.com/" + imagePath
 		// you can change this line for dev mode or prod mode
-		imageId, _ := uuid.NewRandom()
+		imageId := uuid.NewString() // change to string directly is better
 
 		// save image file - for developement version
-		imagePathBase := filepath.Join(uploadsFolder, imageId.String()+file.Filename)
-
-		if err := ctx.SaveUploadedFile(file, imagePathBase); err != nil {
-			ctx.JSON(http.StatusUnprocessableEntity, gin.H{
-				"status":  "error",
-				"message": "Upload image error",
-				"error":   err.Error(),
-			})
-			return
-		}
-
-		// save book url to database
-		book.ImageUrl = "http://127.0.0.1:8081/" + imageId.String() + file.Filename
+		book.ImageUrl = usecase.SaveUploadedFile(ctx, file, uploadsFolder, imageId)
 
 	} else {
 		// binding incoming data
